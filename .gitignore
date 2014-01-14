@@ -3,6 +3,9 @@
 *.log
 *.toc
 *.synctex.gz
+*.dvi
+*.blg
+*.bbl
 
 # Files made automatically by Mac OS X #
 .DS_Store
