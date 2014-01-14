@@ -1,0 +1,8 @@
+# Compiled File #
+*.aux
+*.log
+*.toc
+*.synctex.gz
+
+# Files made automatically by Mac OS X #
+.DS_Store
