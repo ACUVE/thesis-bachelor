@@ -6,6 +6,7 @@
 *.dvi
 *.blg
 *.bbl
+make
 
 # Files made automatically by Mac OS X #
 .DS_Store
