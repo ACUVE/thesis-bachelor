@@ -1,4 +1,7 @@
 \documentclass[ipc]{suribt}
+\usepackage[dvipdfmx]{graphicx}
+\graphicspath{{./images/}}
+\usepackage{fancybox}
 %\documentclass[oneside]{suribt}% 本文が * ページ以下のときに (掲示に注意)
 \title{電力制約下における蓄電池を用いた高性能計算システムの性能向上}
 %\titlewidth{}% タイトル幅 (指定するときは単位つきで)
@@ -10,8 +13,7 @@
 \handin{2014}{2}% 提出月. 2 つ (年, 月) 引数をとる
 %\keywords{キーワード1, キーワード2} % 概要の下に表示される
 
-\usepackage{graphicx}
-%\graphicspath{{./fig/}}
+%\usepackage{graphicx}
 \usepackage{amsmath}
 
 \begin{document}
@@ -40,6 +42,9 @@
 
 \bibliographystyle{unsrt}%           BibTeX を使う場合
 \bibliography{thesis.bib}% BibTeX を使う場合
+\begin{thepublication}{9}
+\bibitem{sigemb}組込み研究会
+\end{thepublication}
 
 \appendix% ここから付録 %%%%% 付録 %%%%%%%
 \chapter{}

@@ -6,6 +6,8 @@
 *.dvi
 *.blg
 *.bbl
+*.swp
+*.bak
 make
 
 # Files made automatically by Mac OS X #
