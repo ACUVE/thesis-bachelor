@@ -131,7 +131,11 @@ int main(int argc, char *argv[])
 
 式(\ref{asm:min})は実行時間の最小化を意味する。式(\ref{asm:s.t.})の左辺は、アプリーケション実行の全体を通して、蓄電池から供給されるエネルギを意味している。蓄電池はあくまで電力を時間方向に融通しているだけであり、エネルギを増やすことはできない。そのため、式(\ref{asm:s.t.})はエネルギ保存制約式となる。
 
-また、$T_i(p)$は式(\ref{asm:model})のような形で表されるため、式(\ref{asm:min})、(\ref{asm:s.t.})で定式化される最適化問題は非線形計画問題となる。
+また、$T_i(p)$はおおまかに近似をとると式(\ref{asm:model})で表される直角双曲線になるため、式(\ref{asm:min})、(\ref{asm:s.t.})で定式化される最適化問題は非線形計画問題となる。
+
+\begin{eqnarray}
+T = a_0 + \frac{a_1}{p-a_2} \label{asm:model}
+\end{eqnarray}
 
 
 \section{電力融通問題の解法}
