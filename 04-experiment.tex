@@ -5,7 +5,7 @@
 \section{実験の目的}
 \label{sec:purpose}
 
-節\ref{sec:curb}で述べたような、電力ー実行時間曲線の違いによって生じる電力を増減させたときの実行時間の変動幅の違いを利用した性能向上手法は今のところ先行研究が存在しない。そのため、本実験において蓄電池を用いて理想的な電力融通を行うことができた場合にどれほどの効果があるのかを見積もることが第一の目的である。また同じく節\ref{sec:curb}で述べたように、プロセッサの周波数が離散的な値しか取ることができないことによって生じる余剰電力を利用した効果もあると予想されるため、その効果もできる限り個別に評価する。これが第二の目的である。
+節\ref{sec:curb}で述べたような、電力−実行時間曲線の違いによって生じる電力を増減させたときの実行時間の変動幅の違いを利用した性能向上手法は今のところ先行研究が存在しない。そのため、本実験において蓄電池を用いて理想的な電力融通を行うことができた場合にどれほどの効果があるのかを見積もることが第一の目的である。また同じく節\ref{sec:curb}で述べたように、プロセッサの周波数が離散的な値しか取ることができないことによって生じる余剰電力を利用した効果もあると予想されるため、その効果もできる限り個別に評価する。これが第二の目的である。
 
 以下、これら二つの目的を達成するための実験方法及びその結果・考察について述べる。
 
@@ -17,31 +17,31 @@
 
 \begin{enumerate}
 \item ユーザがアプリケーションのソースコードに埋め込んだフェーズ区切り文を読み取り、アプリケーションを分割する。
-\item 分割されたフェーズそれぞれについて電力ー実行時間曲線を求める
+\item 分割されたフェーズそれぞれについて電力−実行時間曲線を求める
 \item 分割されたフェーズに対する電力融通問題を解く
 \end{enumerate}
 
 まず、1段階目について述べる。実際に節\ref{sec:phase2}のように書かれたソースコードからフェーズ区切り文を読み取るのはコンパイラレベルでの実装が必要となり困難である。そのため、本実験ではそのフェーズに入ったもしくは出た時刻をログとして出力する自作関数をソースコードに埋め込むことによって、その代わりとした。また、今回実験に利用したアプリケーションは自作のものではないので、ソースコードを読んでどの部分がフェーズの区切りであるかを完全に知ることは困難であった。そこで簡単のため、並列処理部分と逐次処理部分のみをソースコードから判別してフェーズ分割を行った。そして、プロセッサの取りうる全てのDVFSパターンについてアプリケーションを実行し、ログファイルを得た。ただし表\ref{tbl:parsec}に示したアプリケーションのうち、QT Clusteringのみは並列実行の中に2つのフェーズがあったため、全体で並列処理1・並列処理2・逐次処理の3フェーズに分割した。
 
-次に2段階目である。ここでは1段階目で得たログファイルから、それぞれのフェーズについて全てのDVFSパターンにおける平均電力と実行時間を得ることができる。それを用いてそれぞれのフェーズの電力ー実行時間曲線を計算した。ただし実際にはDVFSパターンは有限であるので、電力ー実行時間曲線は図\ref{fig:discrete_power_time}のようになった。
+次に2段階目である。ここでは1段階目で得たログファイルから、それぞれのフェーズについて全てのDVFSパターンにおける平均電力と実行時間を得ることができる。それを用いてそれぞれのフェーズの電力−実行時間曲線を計算した。ただし実際にはDVFSパターンは有限であるので、電力−実行時間曲線は図\ref{fig:discrete_power_time}のようになった。
 
 \begin{figure}[t]
  \begin{center}
   \includegraphics[width=110mm]{discrete_power_time.eps}
  \end{center}
- \caption{離散的な周波数しか取れない場合の電力ー実行時間曲線}
+ \caption{離散的な周波数しか取れない場合の電力−実行時間曲線}
  \label{fig:discrete_power_time}
 \end{figure}
 
-最後に3段階目は、節\ref{sec:algorithm}で述べたように得られた電力ー実行時間曲線から総当たりで最適なDVFS設定値を見つけた。
+最後に3段階目は、節\ref{sec:algorithm}で述べたように得られた電力−実行時間曲線から総当たりで最適なDVFS設定値を見つけた。
 
-また節\ref{sec:purpose}で述べたように、本実験の目的は電力ー実行時間曲線の違いを利用した性能向上と、プロセッサの動作周波数が離散的であることを利用した性能向上のそれぞれを評価することである。ここまでの実験方法では両者の影響が入り交じった結果のみしか得られない。そこで、2段階目で得られた電力ー実行時間グラフを式\ref{asm:model}に合うように補間することによって、連続な電力ー実行時間グラフを得た（図\ref{fig:continuous_power_time}）。ただし完全に連続であると電力融通問題を総当たりで解くことができなくなるため、実際にはある程度の細かい間隔で補間することで連続的な曲線への近似とした。そして、3段階目では同様に総当たりで最適なDVFSの設定値を見つけ、周波数が離散的な場合の結果と比較することによって、電力ー実行時間曲線の違いによる効果とプロセッサが離散的であることによって生じる余剰電力による効果のそれぞれを見積もった。
+また節\ref{sec:purpose}で述べたように、本実験の目的は電力−実行時間曲線の違いを利用した性能向上と、プロセッサの動作周波数が離散的であることを利用した性能向上のそれぞれを評価することである。ここまでの実験方法では両者の影響が入り交じった結果のみしか得られない。そこで、2段階目で得られた電力−実行時間グラフを式\ref{asm:model}に合うように補間することによって、連続な電力−実行時間グラフを得た（図\ref{fig:continuous_power_time}）。ただし完全に連続であると電力融通問題を総当たりで解くことができなくなるため、実際にはある程度の細かい間隔で補間することで連続的な曲線への近似とした。そして、3段階目では同様に総当たりで最適なDVFSの設定値を見つけ、周波数が離散的な場合の結果と比較することによって、電力−実行時間曲線の違いによる効果とプロセッサが離散的であることによって生じる余剰電力による効果のそれぞれを見積もった。
 
 \begin{figure}[t]
  \begin{center}
   \includegraphics[width=110mm]{continuous_power_time.eps}
  \end{center}
- \caption{連続補間した場合の電力ー実行時間曲線}
+ \caption{連続補間した場合の電力−実行時間曲線}
  \label{fig:continuous_power_time}
 \end{figure}
 
@@ -63,88 +63,24 @@
 \section{結果}
 \label{sec:result}
 
-それぞれのアプリケーションの電力ー実行時間曲線を図\ref{fig:canneal_power_time}、\ref{fig:streamcluster_power_time}、\ref{fig:mummergpu_power_time}、\ref{fig:qtclustering_power_time}に、スピードアップ曲線を図\ref{fig:canneal_speedup}、\ref{fig:streamcluster_speedup}、\ref{fig:mummergpu_speedup}、\ref{fig:qtclustering_speedup}に示す。ただし、スピードアップは以下のように定義される。
+それぞれのアプリケーションの電力−実行時間曲線を図\ref{fig:canneal_power_time}、\ref{fig:streamcluster_power_time}、\ref{fig:mummergpu_power_time}、\ref{fig:qtclustering_power_time}に、スピードアップ曲線を図\ref{fig:canneal_speedup}、\ref{fig:streamcluster_speedup}、\ref{fig:mummergpu_speedup}、\ref{fig:qtclustering_speedup}に示す。ただし、スピードアップは以下のように定義される。
 
 \begin{eqnarray}
 スピードアップ =  1 - \frac{{\rm UPS}ありの場合のアプリケーション全体の実行時間}{{\rm UPS}なしの場合のアプリケーション全体の実行時間}
 \end{eqnarray}
 
 
-Cannealの電力ー実行時間グラフは並列処理と逐次処理の電力消費の違いをよく表しており、並列処理の方が逐次処理より大きい電力を消費していることが分かる。Stream Clusterも同様の傾向は見て取れるが、Cannealとは違って逐次処理部分の実行時間が非常に短いことが特徴である。mummergpuのグラフを見ると、どのDVFS設定においても逐次処理部分の実行時間が変わらないことが分かる。これは節\ref{sec:method}で述べたようにGPU並列アプリケーションはGPUの電圧のみを測定しているため、CPUで演算をしている逐次処理部分はの実行時間はGPUの周波数に影響を受けないためである。QT Clusteringでは3つのフェーズがあり、mummergpu同様に逐次処理部分はDVFSの設定によらずほぼ同じ実行時間になっている。
+Cannealの電力−実行時間グラフは並列処理と逐次処理の電力消費の違いをよく表しており、並列処理の方が逐次処理より大きい電力を消費していることが分かる。Stream Clusterも同様の傾向は見て取れるが、Cannealとは違って逐次処理部分の実行時間が非常に短いことが特徴である。mummergpuのグラフを見ると、どのDVFS設定においても逐次処理部分の実行時間が変わらないことが分かる。これは節\ref{sec:method}で述べたようにGPU並列アプリケーションはGPUの電圧のみを測定しているため、CPUで演算をしている逐次処理部分はの実行時間はGPUの周波数に影響を受けないためである。QT Clusteringでは3つのフェーズがあり、mummergpu同様に逐次処理部分はDVFSの設定によらずほぼ同じ実行時間になっている。
 
 次にスピードアップのグラフについてであるが、全体的に離散的な周波数しか取れない場合の方が、連続的に周波数を変化できる場合に比べて効果は大きかった。また離散的な場合は電力制約ごとにスピードアップの変動が大きく、大きくスピードアップする場合もあれば全くスピードアップしない場合もある。連続の場合では、離散的な場合のようにスピードアップの値が大きく変動することはなかったが、やはり電力制約に応じてある程度の変動は見て取れる。
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=110mm]{canneal_power_time.eps}
- \end{center}
- \caption{Canneal 電力ー実行時間曲線}
- \label{fig:canneal_power_time}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=110mm]{streamcluster_power_time.eps}
- \end{center}
- \caption{Stream Cluster 電力ー実行時間曲線}
- \label{fig:streamcluster_power_time}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=110mm]{mummergpu_power_time.eps}
- \end{center}
- \caption{mummergpu 電力ー実行時間曲線}
- \label{fig:mummergpu_power_time}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=110mm]{qtc_power_time.eps}
- \end{center}
- \caption{QT Clustering 電力ー実行時間曲線}
- \label{fig:qtclustering_power_time}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=110mm]{canneal_speedup.eps}
- \end{center}
- \caption{Canneal スピードアップグラフ}
- \label{fig:canneal_speedup}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=110mm]{streamcluster_speedup.eps}
- \end{center}
- \caption{Stream Cluster スピードアップグラフ}
- \label{fig:streamcluster_speedup}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=110mm]{mummergpu_speedup.eps}
- \end{center}
- \caption{mummergpu スピードアップグラフ}
- \label{fig:mummergpu_speedup}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=110mm]{qtc_speedup.eps}
- \end{center}
- \caption{QT Clustering スピードアップグラフ}
- \label{fig:qtclustering_speedup}
-\end{figure}
 
 \begin{table}[t]
 \begin{center}\begin{tabular}{|c|c|}
 \hline ワークロード名 & スピードアップ平均 \\
-\hline PARSEC Canneal & 4.537573714787333\%\\
-\hline PARSEC Stream Cluster & 0.5633360322900735\%\\
-\hline Rodinia mummergpu & 18.23325679997816\%\\
-\hline SHOC QT Clustering & 15.8912119519231\%\\
+\hline PARSEC Canneal & 4.54\%\\
+\hline PARSEC Stream Cluster & 0.56\%\\
+\hline Rodinia mummergpu & 18.23\%\\
+\hline SHOC QT Clustering & 15.89\%\\
 \hline \end{tabular} \caption{スピードアップの算術平均（周波数が離散の場合）}\label{tbl:parsec}
 \end{center}
 \end{table}
@@ -152,13 +88,77 @@ Cannealの電力ー実行時間グラフは並列処理と逐次処理の電力�
 \begin{table}[t]
 \begin{center}\begin{tabular}{|c|c|}
 \hline ワークロード名 & スピードアップ平均 \\
-\hline PARSEC Canneal & 2.2228332480274293\%\\
-\hline PARSEC Stream Cluster & 0.018911137755933463\%\\
-\hline Rodinia mummergpu & 10.443653256366993\%\\
-\hline SHOC QT Clustering & 2.5042232710450536\%\\
+\hline PARSEC Canneal & 2.22\%\\
+\hline PARSEC Stream Cluster & 0.02\%\\
+\hline Rodinia mummergpu & 10.44\%\\
+\hline SHOC QT Clustering & 2.50\%\\
 \hline \end{tabular} \caption{スピードアップの算術平均（周波数が連続の場合）}\label{tbl:parsec}
 \end{center}
 \end{table}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=125mm]{canneal_power_time.eps}
+ \end{center}
+ \caption{Canneal 電力−実行時間曲線}
+ \label{fig:canneal_power_time}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=125mm]{streamcluster_power_time.eps}
+ \end{center}
+ \caption{Stream Cluster 電力−実行時間曲線}
+ \label{fig:streamcluster_power_time}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=122mm]{mummergpu_power_time.eps}
+ \end{center}
+ \caption{mummergpu 電力−実行時間曲線}
+ \label{fig:mummergpu_power_time}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=122mm]{qtc_power_time.eps}
+ \end{center}
+ \caption{QT Clustering 電力−実行時間曲線}
+ \label{fig:qtclustering_power_time}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=125mm]{canneal_speedup.eps}
+ \end{center}
+ \caption{Canneal スピードアップグラフ}
+ \label{fig:canneal_speedup}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=125mm]{streamcluster_speedup.eps}
+ \end{center}
+ \caption{Stream Cluster スピードアップグラフ}
+ \label{fig:streamcluster_speedup}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=122mm]{mummergpu_speedup.eps}
+ \end{center}
+ \caption{mummergpu スピードアップグラフ}
+ \label{fig:mummergpu_speedup}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=122mm]{qtc_speedup.eps}
+ \end{center}
+ \caption{QT Clustering スピードアップグラフ}
+ \label{fig:qtclustering_speedup}
+\end{figure}
 
 
 \section{考察}
@@ -169,16 +169,32 @@ Cannealの電力ー実行時間グラフは並列処理と逐次処理の電力�
 \subsection{周波数が連続的な値を取れる場合の考察}
 \label{subsec:continuous}
 
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=122mm]{canneal_speedup_continuous.eps}
+ \end{center}
+ \caption{Canneal スピードアップグラフ（連続の場合のみ）}
+ \label{fig:canneal_speedup_continuous}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=122mm]{frequency_transition_canneal.eps}
+ \end{center}
+ \caption{Canneal 周波数の推移の様子}
+ \label{fig:frequency_transition_canneal}
+\end{figure}
+
 連続的に周波数が変更できる場合にどのような周波数が最適解となっているかについて考察する。ここでは比較的説明のしやすい、Cannealの連続補間した場合の結果について説明する。
 
-図\ref{fig:canneal_speedup_continuous}、\ref{fig:frequency_transition_canneal}はそれぞれ、周波数が連続的に変えられる場合のCannealの電力ー実行時間曲線とスピードアップグラフである。図\ref{fig:canneal_speedup_continuous}を見ると、電力制約が17Wの部分からスピードアップが増加し始め、28W付近でピークに達しその後は減少していくのが分かる。
+図\ref{fig:canneal_speedup_continuous}、\ref{fig:frequency_transition_canneal}はそれぞれ、周波数が連続的に変えられる場合のCannealの電力−実行時間曲線とスピードアップグラフである。図\ref{fig:canneal_speedup_continuous}を見ると、電力制約が17Wの部分からスピードアップが増加し始め、28W付近でピークに達しその後は減少していくのが分かる。
 
-まず、電力制約が17Wより小さいときの最適周波数について考える。図\ref{fig:frequency_transition_canneal}を見ると分かるように、この範囲においては、逐次処理の周波数を下げて並列処理の周波数を上げている。つまり、逐次処理部分は電力を上げても実行時間があまり短縮されないフェーズであり、逆に並列処理部分は電力を上げることで実行時間が大きく短縮されるフェーズであったということである。ただしここで注意すべきは、蓄電池によって融通しているものは電力ではなくエネルギであるという点である。フェーズAで10Wで充電できたからといって、フェーズBで10Wで放電できるとは限らない。これはそれぞれのフェーズの実行時間が異なるため、充電できるエネルギに差が生じるためである。しかし、節\ref{sec:formularization}で述べたような理想的な蓄電池の場合にはフェーズAで10J充電できた場合はフェーズBで必ず10J放電することができる。つまり、それぞれのフェーズにかけるエネルギを微小変化させたときの、実行時間の短縮の大きさを見てやればよいことになる。これは、実行時間を実行エネルギで微分ものを正負逆転させたものに他ならない。これをエネルギ実行時間短縮率と呼ぶ。エネルギ実行時間短縮率は式\ref{asm:model}を用いて以下のように求められる。
+まず、電力制約が17Wより小さいときの最適周波数について考える。図\ref{fig:frequency_transition_canneal}を見ると分かるように、この範囲においては、逐次処理の周波数を下げて並列処理の周波数を上げている。つまり、逐次処理部分は電力を上げても実行時間があまり短縮されないフェーズであり、逆に並列処理部分は電力を上げることで実行時間が大きく短縮されるフェーズであったということである。ただしここで注意すべきは、蓄電池によって融通しているものは電力ではなくエネルギであるという点である。フェーズAで10Wで充電できたからといって、フェーズBで10Wで放電できるとは限らない。これはそれぞれのフェーズの実行時間が異なるため、充電できるエネルギに差が生じるためである。しかし、節\ref{sec:formularization}で述べたような理想的な蓄電池の場合にはフェーズAで10J充電できた場合はフェーズBで必ず10J放電することができる。つまり、それぞれのフェーズにかけるエネルギを微小変化させたときの、実行時間の短縮の大きさを見てやればよいことになる。これは、実行時間を実行エネルギで微分したものを正負逆転させたものに他ならない。これをエネルギ実行時間短縮率と呼ぶこととする。エネルギ実行時間短縮率は式\ref{asm:model}を用いて以下のように求められる。
 
 \begin{eqnarray}
-E &=& p * T(p)\\
--\frac{dT}{dE} &=& -\frac{dT}{dp} / \frac{dE}{dp}\\
-&=& -\frac{1}{a_2 - \frac{a_0}{a_1}( p-a_2)^2} \label{asm:differential}
+E &=& p \cdot T(p)\\
+-\frac{dT}{dE} &=& -\frac{dT}{dp} \bigg/ \frac{dE}{dp}\\
+&=& -\frac{1}{a_2 - \cfrac{a_0}{a_1}( p-a_2)^2} \label{asm:differential}
 \end{eqnarray}
 
 実際に17W以下の部分については、式\ref{asm:differential}の値がほぼ一致していた。つまりこの部分については、それぞれのフェーズのエネルギ実行時間短縮率の一致する部分が最適解となっている。また、この部分におけるスピードアップは0.5\%未満とかなり小さい。
@@ -189,8 +205,7 @@ E &=& p * T(p)\\
 
 最後に28W以上の部分について考える。この部分についての説明は容易である。図\ref{fig:frequency_transition_canneal}から、28Wのときに電力融通を行っている場合には逐次処理・並列処理のどちらのフェーズも動作周波数が頭打ちになる。従って、電力融通をしている場合にはこれ以上実行時間を短縮する余地がない。一方で電力融通していない場合には、並列処理部分の動作周波数をまだ上げることができるため、実行時間が短縮されていく。結果としてスピードアップは減少していく。
 
-以上それぞれのフェーズにおける考察より、プロセッサが連続的な周波数で動作できる場合にはエネルギ実行時間短縮率が高いフェーズから低いフェーズへできる限り電力を融通できるような充放電計画が最適となることが分かる。また、17W以下の部分のスピードアップを見れば分かるように、電力ー実行時間曲線の特性の違いによって生じるエネルギ実行時間短縮率の違いを利用した電力融通だけでは効果は小さい。一方で17W以上の部分のように、一方のフェーズにおけるプロセッサの性能が頭打ちになることによる余剰電力などがあれば大きな性能向上が見込める。
-
+以上それぞれのフェーズにおける考察より、プロセッサが連続的な周波数で動作できる場合にはエネルギ実行時間短縮率が高いフェーズから低いフェーズへできる限り電力を融通できるような充放電計画が最適となることが分かる。また、17W以下の部分のスピードアップを見れば分かるように、電力−実行時間曲線の特性の違いによって生じるエネルギ実行時間短縮率の違いを利用した電力融通だけでは効果は小さい。一方で17W以上の部分のように、一方のフェーズにおけるプロセッサの性能が頭打ちになることによる余剰電力などがあれば大きな性能向上が見込める。
 
 \subsection{周波数が離散的な値のみしかとれない場合の考察}
 \label{subsec:discreet}
@@ -205,21 +220,6 @@ E &=& p * T(p)\\
 
 今回の実験では電力融通問題を解くために全探索で最適解を求めた。$n$個のフェーズがあるアプリケーションを、$m$個の動作周波数をサポートしているプロセッサ上で走らせた場合の最適解を全探索で求めると、その計算量は${\rm O}(m^n)$となる。これは非常に大きな計算量であるため、新たなアルゴリズムの構築が求められる。節\ref{subsec:continuous}で述べたようなエネルギ実行時間短縮率を指標とした計算量の小さなアルゴリズムの考案が課題となるであろう。また今回は理想的な蓄電池を想定したが、蓄電池の電池容量や充放電速度などの物理的制約を考慮に入れたアルゴリズムの構築も課題である。
 
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=110mm]{canneal_speedup_continuous.eps}
- \end{center}
- \caption{Canneal スピードアップグラフ（連続の場合のみ）}
- \label{fig:canneal_speedup_continuous}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=110mm]{frequency_transition_canneal.eps}
- \end{center}
- \caption{Canneal 周波数の推移の様子}
- \label{fig:frequency_transition_canneal}
-\end{figure}
 
 
 

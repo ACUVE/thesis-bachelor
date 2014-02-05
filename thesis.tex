@@ -18,6 +18,16 @@
 %\usepackage{graphicx}
 \usepackage{amsmath}
 
+\renewcommand{\topfraction}{1.0}
+\renewcommand{\bottomfraction}{1.0}
+\renewcommand{\dbltopfraction}{1.0}
+\renewcommand{\textfraction}{0.01}
+\renewcommand{\floatpagefraction}{1.0}
+\renewcommand{\dblfloatpagefraction}{1.0}
+\setcounter{topnumber}{10}
+\setcounter{bottomnumber}{10}
+\setcounter{totalnumber}{20}
+
 \begin{document}
 \maketitle%%%%%%%%%%%%%%%%%%% タイトル %%%%
 
@@ -46,7 +56,7 @@
 \bibliographystyle{unsrt}%           BibTeX を使う場合
 \bibliography{thesis.bib}% BibTeX を使う場合
 \begin{thepublication}{9}
-\bibitem{sigemb}組込み研究会
+\bibitem{sigemb}電力制約下における蓄電池を用いたHPCシステムの性能向上 第143回ハイパフォーマンスコンピューティング研究発表会
 \end{thepublication}
 
 \appendix% ここから付録 %%%%% 付録 %%%%%%%
