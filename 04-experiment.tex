@@ -5,9 +5,8 @@
 \section{実験の目的}
 \label{sec:purpose}
 
-節\ref{sec:curb}で述べたような、電力−実行時間曲線の違いによって生じる電力を増減させたときの実行時間の変動幅の違いを利用した性能向上手法は今のところ先行研究が存在しない。そのため、本実験において蓄電池を用いて理想的な電力融通を行うことができた場合にどれほどの効果があるのかを見積もることが第一の目的である。また同じく節\ref{sec:curb}で述べたように、プロセッサの周波数が離散的な値しか取ることができないことによって生じる余剰電力を利用した効果もあると予想されるため、その効果もできる限り個別に評価する。これが第二の目的である。
+本実験を行うことで、蓄電池を用いた電力融通手法による電力制約下での性能向上効果を見積もる。蓄電池の特性としては\ref{sec:formularization}節で述べたような理想的な特性を仮定する。また\ref{sec:curb}節で述べたように、蓄電池を用いた電力融通による電力制約下での性能向上が起こる場合には3つのケースがある。そこで、それぞれのケースがどの程度の効果をもたらしているかを評価・考察する。
 
-以下、これら二つの目的を達成するための実験方法及びその結果・考察について述べる。
 
 
 \section{実験方法}
@@ -35,7 +34,7 @@
 
 最後に3段階目は、節\ref{sec:algorithm}で述べたように得られた電力−実行時間曲線から総当たりで最適なDVFS設定値を見つけた。
 
-また節\ref{sec:purpose}で述べたように、本実験の目的は電力−実行時間曲線の違いを利用した性能向上と、プロセッサの動作周波数が離散的であることを利用した性能向上のそれぞれを評価することである。ここまでの実験方法では両者の影響が入り交じった結果のみしか得られない。そこで、2段階目で得られた電力−実行時間グラフを式\ref{asm:model}に合うように補間することによって、連続な電力−実行時間グラフを得た（図\ref{fig:continuous_power_time}）。ただし完全に連続であると電力融通問題を総当たりで解くことができなくなるため、実際にはある程度の細かい間隔で補間することで連続的な曲線への近似とした。そして、3段階目では同様に総当たりで最適なDVFSの設定値を見つけ、周波数が離散的な場合の結果と比較することによって、電力−実行時間曲線の違いによる効果とプロセッサが離散的であることによって生じる余剰電力による効果のそれぞれを見積もった。
+また節\ref{sec:purpose}で述べたように、本実験の目的には電力制約下での性能向上をもたらす3つのケースのそれぞれの効果を評価することも含まれる。しかし、ここまでの実験方法ではそれぞれケースの影響が入り交じった結果のみしか得られないため、それぞれのケースの効果を見積もることは困難である。そこで、ケース3の効果はプロセッサが離散的な周波数のみしか取ることができないことが原因であることに着目した。本実験の2段階目で得られた電力−実行時間曲線を式\ref{asm:model}に合うように補間することによって、連続な電力−実行時間曲線を求め（図\ref{fig:continuous_power_time}）、ケース3の影響のみを切り分けて評価できるようにした。ただし完全に連続であると電力融通問題を総当たりで解くことができなくなるため、実際にはある程度の細かい間隔で補間することで連続的な曲線への近似とした。そして、3段階目では同様に総当たりで最適なDVFSの設定値を見つけ、周波数が離散的な場合の結果と比較することによって、電力−実行時間曲線の違いによる効果とプロセッサが離散的であることによって生じる余剰電力による効果のそれぞれを見積もった。
 
 \begin{figure}[t]
  \begin{center}
@@ -58,6 +57,20 @@
 \end{center}
 \end{table}
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+                     & 名称  &  周波数 (MHz) \\ \hline
+        CPU          & Intel Core i7 4770 4コア & 800 - 3200   \\ \hline
+        GPUs         & NVIDIA K20c 2496コア         & 324 - 758  \\ \hline
+        MotherBoards & ASRock H87M & -- \\ \hline
+        OS           & Ubuntu 13.04 &  -- \\ \hline
+    \end{tabular}
+    \caption{実験機の構成}
+    \label{tab:machine-setup}
+\end{table}
+
 
 
 \section{結果}
@@ -70,7 +83,7 @@
 \end{eqnarray}
 
 
-Cannealの電力−実行時間グラフは並列処理と逐次処理の電力消費の違いをよく表しており、並列処理の方が逐次処理より大きい電力を消費していることが分かる。Stream Clusterも同様の傾向は見て取れるが、Cannealとは違って逐次処理部分の実行時間が非常に短いことが特徴である。mummergpuのグラフを見ると、どのDVFS設定においても逐次処理部分の実行時間が変わらないことが分かる。これは節\ref{sec:method}で述べたようにGPU並列アプリケーションはGPUの電圧のみを測定しているため、CPUで演算をしている逐次処理部分はの実行時間はGPUの周波数に影響を受けないためである。QT Clusteringでは3つのフェーズがあり、mummergpu同様に逐次処理部分はDVFSの設定によらずほぼ同じ実行時間になっている。
+Cannealの電力−実行時間曲線は並列処理と逐次処理の電力消費の違いをよく表しており、並列処理の方が逐次処理より大きい電力を消費していることが分かる。Stream Clusterも同様の傾向は見て取れるが、Cannealとは違って逐次処理部分の実行時間が非常に短いことが特徴である。mummergpuのグラフを見ると、どのDVFS設定においても逐次処理部分の実行時間が変わらないことが分かる。これは節\ref{sec:method}で述べたようにGPU並列アプリケーションはGPUの電圧のみを測定しているため、CPUで演算をしている逐次処理部分はの実行時間はGPUの周波数に影響を受けないためである。QT Clusteringでは3つのフェーズがあり、mummergpu同様に逐次処理部分はDVFSの設定によらずほぼ同じ実行時間になっている。
 
 次にスピードアップのグラフについてであるが、全体的に離散的な周波数しか取れない場合の方が、連続的に周波数を変化できる場合に比べて効果は大きかった。また離散的な場合は電力制約ごとにスピードアップの変動が大きく、大きくスピードアップする場合もあれば全くスピードアップしない場合もある。連続の場合では、離散的な場合のようにスピードアップの値が大きく変動することはなかったが、やはり電力制約に応じてある程度の変動は見て取れる。
 
@@ -106,34 +119,18 @@ Cannealの電力−実行時間グラフは並列処理と逐次処理の電力�
 
 \begin{figure}[t]
  \begin{center}
-  \includegraphics[width=125mm]{streamcluster_power_time.eps}
- \end{center}
- \caption{Stream Cluster 電力−実行時間曲線}
- \label{fig:streamcluster_power_time}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=122mm]{mummergpu_power_time.eps}
- \end{center}
- \caption{mummergpu 電力−実行時間曲線}
- \label{fig:mummergpu_power_time}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
-  \includegraphics[width=122mm]{qtc_power_time.eps}
- \end{center}
- \caption{QT Clustering 電力−実行時間曲線}
- \label{fig:qtclustering_power_time}
-\end{figure}
-
-\begin{figure}[t]
- \begin{center}
   \includegraphics[width=125mm]{canneal_speedup.eps}
  \end{center}
  \caption{Canneal スピードアップグラフ}
  \label{fig:canneal_speedup}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=125mm]{streamcluster_power_time.eps}
+ \end{center}
+ \caption{Stream Cluster 電力−実行時間曲線}
+ \label{fig:streamcluster_power_time}
 \end{figure}
 
 \begin{figure}[t]
@@ -146,10 +143,26 @@ Cannealの電力−実行時間グラフは並列処理と逐次処理の電力�
 
 \begin{figure}[t]
  \begin{center}
+  \includegraphics[width=122mm]{mummergpu_power_time.eps}
+ \end{center}
+ \caption{mummergpu 電力−実行時間曲線}
+ \label{fig:mummergpu_power_time}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
   \includegraphics[width=122mm]{mummergpu_speedup.eps}
  \end{center}
  \caption{mummergpu スピードアップグラフ}
  \label{fig:mummergpu_speedup}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=122mm]{qtc_power_time.eps}
+ \end{center}
+ \caption{QT Clustering 電力−実行時間曲線}
+ \label{fig:qtclustering_power_time}
 \end{figure}
 
 \begin{figure}[t]
@@ -161,17 +174,9 @@ Cannealの電力−実行時間グラフは並列処理と逐次処理の電力�
 \end{figure}
 
 
-\section{考察}
-\label{sec:discussion}
-
-4つのアプリケーションの中で、Stream Clusterのみは蓄電池を用いた電力融通にスピードアップがとても小さかった。これは、逐次処理部分の実行時間が並列処理部分の実行時間と比べて非常に短かったため、蓄電池が充放電する時間がほとんどなく、電力融通を上手く行うことができなかったためであると考えられる。
-
-\subsection{周波数が連続的な値を取れる場合の考察}
-\label{subsec:continuous}
-
 \begin{figure}[t]
  \begin{center}
-  \includegraphics[width=122mm]{canneal_speedup_continuous.eps}
+  \includegraphics[width=122mm]{canneal_speedup_continuous_modified.eps}
  \end{center}
  \caption{Canneal スピードアップグラフ（連続の場合のみ）}
  \label{fig:canneal_speedup_continuous}
@@ -181,9 +186,35 @@ Cannealの電力−実行時間グラフは並列処理と逐次処理の電力�
  \begin{center}
   \includegraphics[width=122mm]{frequency_transition_canneal.eps}
  \end{center}
- \caption{Canneal 周波数の推移の様子}
+ \caption{Canneal 周波数の推移の様子（連続の場合）}
  \label{fig:frequency_transition_canneal}
 \end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=123mm]{mummergpu_speedup_discreet_modified.eps}
+ \end{center}
+ \caption{mummergpu スピードアップグラフ（離散の場合のみ）}
+ \label{fig:mummergpu_speedup_discreet}
+\end{figure}
+
+\begin{figure}[t]
+ \begin{center}
+  \includegraphics[width=123mm]{frequency_transition_mummergpu.eps}
+ \end{center}
+ \caption{mummergpu 周波数の推移の様子（離散の場合）}
+ \label{fig:frequency_transition_mummergpu}
+\end{figure}
+
+
+\section{考察}
+\label{sec:discussion}
+
+4つのアプリケーションの中で、Stream Clusterのみは蓄電池を用いた電力融通にスピードアップがとても小さかった。これは、逐次処理部分の実行時間が並列処理部分の実行時間と比べて非常に短かったため、蓄電池が充放電する時間がほとんどなく、電力融通を上手く行うことができなかったためであると考えられる。
+
+\subsection{周波数が連続的な値を取れる場合の考察}
+\label{subsec:continuous}
+
 
 連続的に周波数が変更できる場合にどのような周波数が最適解となっているかについて考察する。ここでは比較的説明のしやすい、Cannealの連続補間した場合の結果について説明する。
 
